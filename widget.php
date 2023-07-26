@@ -23,22 +23,11 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
         return ['general'];
     }
 
-    // Widget controls/settings
     protected function _register_controls() {
         $this->start_controls_section(
             'section_content',
             [
                 'label' => __('Slider Settings', 'auxesia-product-category'),
-            ]
-        );
-		
-		// Add the Font Awesome CDN link to the controls section
-        $this->add_control(
-            'font_awesome_cdn',
-            [
-                'label' => __( 'Font Awesome CDN', 'auxesia-product-category' ),
-                'type' => \Elementor\Controls_Manager::RAW_HTML,
-                'raw' => '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">',
             ]
         );
 
@@ -172,74 +161,94 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
         return $categories;
     }
 
-	// Widget frontend render
-protected function render() {
-    $settings = $this->get_settings_for_display();
-    $categories = $this->get_product_categories();
+    // Helper function to get the plugin directory URL
+    protected function get_plugin_dir_url() {
+        return plugin_dir_url(__FILE__);
+    }
 
-    // Add inline styles for arrow size
-    $arrow_size = isset($settings['arrow_size']['size']) ? $settings['arrow_size']['size'] : 20;
-    $arrow_unit = isset($settings['arrow_size']['unit']) ? $settings['arrow_size']['unit'] : 'px';
+    // Widget frontend render
+    protected function render() {
+        $settings = $this->get_settings_for_display();
+        $categories = $this->get_product_categories();
 
-    $this->add_inline_editing_attributes('text_color', 'basic');
-    ?>
-    <style>
-        .auxesia-slider-outer {
-            max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
-            margin: 0 auto;
-            overflow: hidden;
-        }
+        // Add plugin directory URL
+        $plugin_dir_url = $this->get_plugin_dir_url();
 
-        .auxesia-slider-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            white-space: nowrap;
-            transition: transform 0.3s ease;
-        }
+        // Add Font Awesome 6 stylesheet link
+        echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">';
 
-        .swiper-slide {
-            display: inline-block;
-            width: max-content;
-            color: <?php echo $settings['text_color']; ?>;
-            <?php if ($settings['categories_typography']['font_size']) : ?>
-                font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
-            <?php endif; ?>
-        }
+        // Output the Font Awesome 6 webfont stylesheet
+        echo '<style>
+                @font-face {
+                    font-family: "Font Awesome 6 Free";
+                    font-style: normal;
+                    font-weight: 400;
+                    src: url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff2) format("woff2"),
+                         url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff) format("woff");
+                }
+                
+                .controls i {
+                    font-family: "Font Awesome 6 Free";
+                }
+            </style>';
 
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
+        // Add inline styles for arrow size
+        $arrow_size = isset($settings['arrow_size']['size']) ? $settings['arrow_size']['size'] : 20;
+        $arrow_unit = isset($settings['arrow_size']['unit']) ? $settings['arrow_size']['unit'] : 'px';
 
-        .controls i {
-            color: <?php echo $settings['icon_color']; ?>;
-            font-size: <?php echo $arrow_size . $arrow_unit; ?>; /* Apply the arrow size */
-        }
+        $this->add_inline_editing_attributes('text_color', 'basic');
+        ?>
+        <style>
+            .auxesia-slider-outer {
+                max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
+                margin: 0 auto;
+                overflow: hidden;
+            }
 
-        /* Add the styles for the previous and next arrow position */
-        .controls i:first-child {
-            transform: translate(5vw, -30px);
-        }
+            .controls i {
+                color: <?php echo $settings['icon_color']; ?>;
+                font-size: <?php echo $arrow_size . $arrow_unit; ?>; /* Apply the arrow size */
+            }
 
-        .controls i:last-child {
-            transform: translate(-5vw, -30px);
-        }
-    </style>
-    <div class="auxesia-slider-outer">
-        <div class="auxesia-slider-container">
-            <?php foreach ($categories as $category) : ?>
-                <div class="swiper-slide">
-                    <?php echo $category->name; ?>
-                </div>
-            <?php endforeach; ?>
+            .auxesia-slider-container {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                white-space: nowrap;
+                transition: transform 0.3s ease;
+            }
+
+            .swiper-slide {
+                display: inline-block;
+                width: max-content;
+                color: <?php echo $settings['text_color']; ?>;
+                <?php if ($settings['categories_typography']['font_size']) : ?>
+                    font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
+                <?php endif; ?>
+            }
+
+            /* Add the styles for the previous and next arrow position */
+            /*.controls i:first-child {
+                transform: translate(5vw, -30px);
+            }
+
+            .controls i:last-child {
+                transform: translate(-5vw, -30px);
+            } */
+        </style>
+        <div class="auxesia-slider-outer">
+            <div class="auxesia-slider-container">
+                <?php foreach ($categories as $category) : ?>
+                    <div class="swiper-slide">
+                        <?php echo $category->name; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="controls">
+                <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>"></i>
+                <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>"></i>
+            </div>
         </div>
-        <div class="controls">
-            <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>"></i>
-            <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>"></i>
-        </div>
-    </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const outerContainer = document.querySelector('.auxesia-slider-outer');
@@ -273,6 +282,6 @@ protected function render() {
                 nextButton.addEventListener('click', handleNextSlide);
             });
         </script>
-<?php
+    <?php
     }
 }
