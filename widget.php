@@ -199,89 +199,137 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
         $this->add_inline_editing_attributes('text_color', 'basic');
         ?>
         <style>
-            .auxesia-slider-outer {
-                max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
-                margin: 0 auto;
-                overflow: hidden;
-            }
-
-            .controls i {
-                color: <?php echo $settings['icon_color']; ?>;
-                font-size: <?php echo $arrow_size . $arrow_unit; ?>; /* Apply the arrow size */
-            }
-
-            .auxesia-slider-container {
-                display: flex;
-                align-items: center;
-                gap: 20px;
-                white-space: nowrap;
-                transition: transform 0.3s ease;
-            }
-
-            .swiper-slide {
-                display: inline-block;
-                width: max-content;
-                color: <?php echo $settings['text_color']; ?>;
-                <?php if ($settings['categories_typography']['font_size']) : ?>
-                    font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
-                <?php endif; ?>
-            }
-
-            /* Add the styles for the previous and next arrow position */
-            /*.controls i:first-child {
-                transform: translate(5vw, -30px);
-            }
-
-            .controls i:last-child {
-                transform: translate(-5vw, -30px);
-            } */
-        </style>
-        <div class="auxesia-slider-outer">
-            <div class="auxesia-slider-container">
-                <?php foreach ($categories as $category) : ?>
-                    <div class="swiper-slide">
-                        <?php echo $category->name; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <div class="controls">
-                <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>"></i>
-                <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>"></i>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const outerContainer = document.querySelector('.auxesia-slider-outer');
-                const container = outerContainer.querySelector('.auxesia-slider-container');
-                const slides = container.querySelectorAll('.swiper-slide');
-                const prevButton = outerContainer.querySelector('.controls i:first-child');
-                const nextButton = outerContainer.querySelector('.controls i:last-child');
-                const slideWidth = slides[0].offsetWidth;
-                const slidesPerView = 3; // Set the number of slides to show at once
-                let currentIndex = 0; // Keep the initial value of currentIndex
-
-                // Calculate the width of each slide based on the number of slides to show
-                const slideWidthWithSpacing = slideWidth * slidesPerView;
-                container.style.width = `${slideWidthWithSpacing}px`;
-
-                function updateSliderPosition() {
-                    container.style.transform = 'translateX(-' + currentIndex * slideWidth + 'px)';
-                }
-
-                function handleNextSlide() {
-                    currentIndex = Math.min(currentIndex + 1, slides.length - slidesPerView);
-                    updateSliderPosition();
-                }
-
-                function handlePrevSlide() {
-                    currentIndex = Math.max(currentIndex - 1, 0);
-                    updateSliderPosition();
-                }
-
-                prevButton.addEventListener('click', handlePrevSlide);
-                nextButton.addEventListener('click', handleNextSlide);
-            });
-        </script>
-    <?php
+    .auxesia-slider-outer {
+        max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
     }
+
+    .auxesia-slider-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        white-space: nowrap;
+        transition: transform 0.3s ease;
+    }
+
+    .swiper-slide {
+        display: inline-block;
+        width: max-content;
+        color: <?php echo $settings['text_color']; ?>;
+        <?php if ($settings['categories_typography']['font_size']) : ?>
+            font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
+        <?php endif; ?>
+    }
+
+    .controls-wrapper {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 5vw);
+        z-index: 1;
+        /* Allow controls to overflow */
+        overflow: visible;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .controls i {
+        color: <?php echo $settings['icon_color']; ?>;
+        font-size: <?php echo $arrow_size . $arrow_unit; ?>;
+    }
+
+    /* Position the left arrow on the left side */
+    .controls i:first-child {
+        margin-right: 30px; /* Add spacing between controls */
+    }
+
+    /* Position the right arrow on the right side */
+    .controls i:last-child {
+        margin-left: 30px; /* Add spacing between controls */
+    }
+</style>
+<div class="controls-wrapper">
+    <div class="controls">
+        <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>"></i>
+        <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>"></i>
+    </div>
+</div>
+<div class="auxesia-slider-outer">
+    <div class="auxesia-slider-container">
+        <?php foreach ($categories as $category) : ?>
+            <div class="swiper-slide">
+                <?php echo $category->name; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const outerContainer = document.querySelector('.auxesia-slider-outer');
+        const container = outerContainer.querySelector('.auxesia-slider-container');
+        const slides = container.querySelectorAll('.swiper-slide');
+        const prevButton = document.querySelector('.controls i:first-child');
+        const nextButton = document.querySelector('.controls i:last-child');
+        const slideWidth = slides[0].offsetWidth;
+        const slidesPerView = 3; // Set the number of slides to show at once
+        const totalSlides = slides.length;
+
+        const containerWidth = slidesPerView * slideWidth;
+
+        let currentIndex = 0;
+
+        function updateSliderPosition() {
+            // Calculate the maximum number of slides that can be shown without overflowing
+            const maxVisibleSlides = Math.floor(containerWidth / slideWidth);
+
+            // Calculate the maximum value for currentIndex to avoid overflowing
+            const maxIndex = Math.max(0, totalSlides - maxVisibleSlides + 2); // Increase maxTranslate by 1 slide (slideWidth) and 10 pixels
+
+            // Limit currentIndex within bounds
+            currentIndex = Math.max(0, Math.min(maxIndex, currentIndex));
+
+            const translateXValue = -currentIndex * slideWidth;
+            container.style.transform = `translateX(${translateXValue}px)`;
+        }
+
+        function handleNextSlide() {
+            currentIndex++;
+            updateSliderPosition();
+        }
+
+        function handlePrevSlide() {
+            currentIndex--;
+            updateSliderPosition();
+        }
+
+        prevButton.addEventListener('click', handlePrevSlide);
+        nextButton.addEventListener('click', handleNextSlide);
+
+        // Add hover event listeners for slider elements and icons
+        slides.forEach((slide) => {
+            slide.addEventListener('mouseover', () => {
+                outerContainer.style.cursor = 'grab';
+            });
+
+            slide.addEventListener('mouseout', () => {
+                outerContainer.style.cursor = 'default';
+            });
+        });
+
+        prevButton.addEventListener('mouseover', () => {
+            outerContainer.style.cursor = 'pointer';
+        });
+
+        nextButton.addEventListener('mouseover', () => {
+            outerContainer.style.cursor = 'pointer';
+        });
+    });
+</script>
+    <?php
+}
 }
