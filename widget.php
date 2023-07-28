@@ -24,119 +24,161 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
     }
 
     protected function _register_controls() {
-        $this->start_controls_section(
-            'section_content',
-            [
-                'label' => __('Slider Settings', 'auxesia-product-category'),
-            ]
-        );
+    $this->start_controls_section(
+        'section_content',
+        [
+            'label' => __('Slider Settings', 'auxesia-product-category'),
+        ]
+    );
 
-        $this->add_control(
-            'slider_width',
-            [
-                'label' => __('Slider Width', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::SLIDER,
-                'default' => [
-                    'size' => 60,
-                    'unit' => 'vw',
+    $this->add_control(
+        'slider_width',
+        [
+            'label' => __('Slider Width', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::SLIDER,
+            'default' => [
+                'size' => 60,
+                'unit' => 'vw',
+            ],
+            'range' => [
+                'vw' => [
+                    'min' => 20,
+                    'max' => 100,
                 ],
-                'range' => [
-                    'vw' => [
-                        'min' => 20,
-                        'max' => 100,
-                    ],
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .auxesia-slider-outer' => 'max-width: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
+            ],
+            'selectors' => [
+                '{{WRAPPER}} .auxesia-slider-outer' => 'max-width: {{SIZE}}{{UNIT}};',
+            ],
+        ]
+    );
 
-        $this->add_control(
-            'prev_icon',
-            [
-                'label' => __('Previous Icon', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::ICONS,
-                'default' => [
-                    'value' => 'fas fa-chevron-left',
-                    'library' => 'solid',
-                ],
-            ]
-        );
+    $this->add_control(
+        'prev_icon',
+        [
+            'label' => __('Previous Icon', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::ICONS,
+            'default' => [
+                'value' => 'fas fa-chevron-left',
+                'library' => 'solid',
+            ],
+        ]
+    );
 
-        $this->add_control(
-            'next_icon',
-            [
-                'label' => __('Next Icon', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::ICONS,
-                'default' => [
-                    'value' => 'fas fa-chevron-right',
-                    'library' => 'solid',
-                ],
-            ]
-        );
+    $this->add_control(
+        'next_icon',
+        [
+            'label' => __('Next Icon', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::ICONS,
+            'default' => [
+                'value' => 'fas fa-chevron-right',
+                'library' => 'solid',
+            ],
+        ]
+    );
 
-        $this->add_control(
-            'icon_color',
-            [
-                'label' => __('Icon Color', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::COLOR,
-                'selectors' => [
-                    '{{WRAPPER}} .controls i' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
+    $this->add_control(
+        'icon_color',
+        [
+            'label' => __('Icon Color', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::COLOR,
+            'selectors' => [
+                '{{WRAPPER}} .controls i' => 'color: {{VALUE}};',
+            ],
+        ]
+    );
 
-        $this->add_control(
-            'text_color',
-            [
-                'label' => __('Text Color', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::COLOR,
-                'selectors' => [
-                    '{{WRAPPER}} .auxesia-slider-container .swiper-slide' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
+    $this->add_control(
+        'text_color',
+        [
+            'label' => __('Text Color', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::COLOR,
+            'selectors' => [
+                '{{WRAPPER}} .auxesia-slider-container .swiper-slide' => 'color: {{VALUE}};',
+            ],
+        ]
+    );
 
-        $this->add_group_control(
-            \Elementor\Group_Control_Typography::get_type(),
-            [
-                'name' => 'categories_typography',
-                'label' => __('Categories Typography', 'auxesia-product-category'),
-                'selector' => '{{WRAPPER}} .auxesia-slider-container .swiper-slide',
-            ]
-        );
+    $this->add_group_control(
+        \Elementor\Group_Control_Typography::get_type(),
+        [
+            'name' => 'categories_typography',
+            'label' => __('Categories Typography', 'auxesia-product-category'),
+            'selector' => '{{WRAPPER}} .auxesia-slider-container .swiper-slide',
+        ]
+    );
 
-        $this->add_control(
-            'arrow_size',
-            [
-                'label' => __('Arrow Size', 'auxesia-product-category'),
-                'type' => \Elementor\Controls_Manager::SLIDER,
-                'size_units' => ['px', 'em', 'rem'],
-                'range' => [
-                    'px' => [
-                        'min' => 10,
-                        'max' => 100,
-                    ],
-                    'em' => [
-                        'min' => 0.1,
-                        'max' => 10,
-                        'step' => 0.1,
-                    ],
-                    'rem' => [
-                        'min' => 0.1,
-                        'max' => 10,
-                        'step' => 0.1,
-                    ],
+    $this->add_control(
+        'arrow_size',
+        [
+            'label' => __('Arrow Size', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::SLIDER,
+            'size_units' => ['px', 'em', 'rem'],
+            'range' => [
+                'px' => [
+                    'min' => 10,
+                    'max' => 100,
                 ],
-                'selectors' => [
-                    '{{WRAPPER}} .controls i' => 'font-size: {{SIZE}}{{UNIT}};',
+                'em' => [
+                    'min' => 0.1,
+                    'max' => 10,
+                    'step' => 0.1,
                 ],
-            ]
-        );
+                'rem' => [
+                    'min' => 0.1,
+                    'max' => 10,
+                    'step' => 0.1,
+                ],
+            ],
+            'selectors' => [
+                '{{WRAPPER}} .controls i' => 'font-size: {{SIZE}}{{UNIT}};',
+            ],
+        ]
+    );
 
-        $this->end_controls_section();
-    }
+    $this->end_controls_section();
+
+    $this->start_controls_section(
+        'section_active_category',
+        [
+            'label' => __('Active Category', 'auxesia-product-category'),
+        ]
+    );
+
+    $this->add_group_control(
+        \Elementor\Group_Control_Typography::get_type(),
+        [
+            'name' => 'active_category_typography',
+            'label' => __('Active Category Typography', 'auxesia-product-category'),
+            'selector' => '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active',
+        ]
+    );
+
+    $this->add_control(
+        'active_category_color',
+        [
+            'label' => __('Active Category Color', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::COLOR,
+            'selectors' => [
+                '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active' => 'color: {{VALUE}};',
+            ],
+        ]
+    );
+
+    $this->add_control(
+        'active_category_background_color',
+        [
+            'label' => __('Active Category Background Color', 'auxesia-product-category'),
+            'type' => \Elementor\Controls_Manager::COLOR,
+            'selectors' => [
+                '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active' => 'background-color: {{VALUE}};',
+            ],
+        ]
+    );
+
+    $this->end_controls_section();
+
+}
+
 
     // Get all product categories from WooCommerce excluding "Uncategorized"
     protected function get_product_categories() {
@@ -167,93 +209,110 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
     }
 
     // Widget frontend render
-    protected function render() {
-        $settings = $this->get_settings_for_display();
-        $categories = $this->get_product_categories();
+protected function render() {
+    $settings = $this->get_settings_for_display();
+    $categories = $this->get_product_categories();
+    $active_category = isset($_GET['product_cat']) ? $_GET['product_cat'] : 'all'; // Get the active category from URL parameter
 
-        // Add plugin directory URL
-        $plugin_dir_url = $this->get_plugin_dir_url();
+    // Add plugin directory URL
+    $plugin_dir_url = $this->get_plugin_dir_url();
 
-        // Add Font Awesome 6 stylesheet link
-        echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">';
+    // Add Font Awesome 6 stylesheet link
+    echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">';
 
-        // Output the Font Awesome 6 webfont stylesheet
-        echo '<style>
-                @font-face {
-                    font-family: "Font Awesome 6 Free";
-                    font-style: normal;
-                    font-weight: 400;
-                    src: url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff2) format("woff2"),
-                         url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff) format("woff");
-                }
-                
-                .controls i {
-                    font-family: "Font Awesome 6 Free";
-                }
-            </style>';
+    // Output the Font Awesome 6 webfont stylesheet
+    echo '<style>
+            @font-face {
+                font-family: "Font Awesome 6 Free";
+                font-style: normal;
+                font-weight: 400;
+                src: url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff2) format("woff2"),
+                     url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff) format("woff");
+            }
+            
+            .controls i {
+                font-family: "Font Awesome 6 Free";
+            }
+        </style>';
 
-        // Add inline styles for arrow size
-        $arrow_size = isset($settings['arrow_size']['size']) ? $settings['arrow_size']['size'] : 20;
-        $arrow_unit = isset($settings['arrow_size']['unit']) ? $settings['arrow_size']['unit'] : 'px';
+    // Add inline styles for arrow size
+    $arrow_size = isset($settings['arrow_size']['size']) ? $settings['arrow_size']['size'] : 20;
+    $arrow_unit = isset($settings['arrow_size']['unit']) ? $settings['arrow_size']['unit'] : 'px';
 
-        $this->add_inline_editing_attributes('text_color', 'basic');
-        ?>
-        <style>
-    .auxesia-slider-outer {
-        max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
-        margin: 0 auto;
-        overflow: hidden;
-        position: relative;
+    // Get active category index
+    $active_category_index = 0;
+    foreach ($categories as $index => $category) {
+        if ($category->slug === $active_category) {
+            $active_category_index = $index;
+            break;
+        }
     }
 
-    .auxesia-slider-container {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        white-space: nowrap;
-        transition: transform 0.3s ease;
-    }
+    $this->add_inline_editing_attributes('text_color', 'basic');
+    ?>
+    <style>
+        .auxesia-slider-outer {
+            max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+			z-index: 2;
+        }
 
-    .swiper-slide {
-        display: inline-block;
-        width: max-content;
-        color: <?php echo $settings['text_color']; ?>;
-        <?php if ($settings['categories_typography']['font_size']) : ?>
-            font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
-        <?php endif; ?>
-    }
+        .auxesia-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+            transition: transform 0.3s ease;
+        }
 
-    .controls-wrapper {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 5vw);
-        z-index: 1;
-        /* Allow controls to overflow */
-        overflow: visible;
-    }
+        .swiper-slide {
+            display: inline-block;
+            width: max-content;
+            color: <?php echo $settings['text_color']; ?>;
+            <?php if ($settings['categories_typography']['font_size']) : ?>
+                font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
+            <?php endif; ?>
+        }
 
-    .controls {
-        display: flex;
-        justify-content: space-between;
-    }
+        .controls-wrapper {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 5vw);
+            z-index: 1;
+            /* Allow controls to overflow */
+            overflow: visible;
+        }
 
-    .controls i {
-        color: <?php echo $settings['icon_color']; ?>;
-        font-size: <?php echo $arrow_size . $arrow_unit; ?>;
-    }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+        }
 
-    /* Position the left arrow on the left side */
-    .controls i:first-child {
-        margin-right: 30px; /* Add spacing between controls */
-    }
+        .controls i {
+            color: <?php echo $settings['icon_color']; ?>;
+            font-size: <?php echo $arrow_size . $arrow_unit; ?>;
+        }
 
-    /* Position the right arrow on the right side */
-    .controls i:last-child {
-        margin-left: 30px; /* Add spacing between controls */
-    }
-</style>
-<div class="controls-wrapper">
+        /* Position the left arrow on the left side */
+        .controls i:first-child {
+            margin-right: 30px; /* Add spacing between controls */
+        }
+
+        /* Position the right arrow on the right side */
+        .controls i:last-child {
+            margin-left: 30px; /* Add spacing between controls */
+        }
+
+        /* Set active category style */
+        .auxesia-slider-container .swiper-slide.active {
+            font-weight: bold;
+            /* Add additional styles for active category here */
+        }
+    </style>
+    <div class="controls-wrapper">
     <div class="controls">
         <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>"></i>
         <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>"></i>
@@ -261,8 +320,8 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
 </div>
 <div class="auxesia-slider-outer">
     <div class="auxesia-slider-container">
-        <?php foreach ($categories as $category) : ?>
-            <div class="swiper-slide">
+        <?php foreach ($categories as $index => $category) : ?>
+            <div class="swiper-slide <?php echo $active_category_index === $index ? 'active' : ''; ?>" onclick="handleSlideClick(this)">
                 <?php echo $category->name; ?>
             </div>
         <?php endforeach; ?>
@@ -281,18 +340,13 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
 
         const containerWidth = slidesPerView * slideWidth;
 
-        let currentIndex = 0;
+        let currentIndex = <?php echo $active_category_index; ?>;
 
         function updateSliderPosition() {
-            // Calculate the maximum number of slides that can be shown without overflowing
             const maxVisibleSlides = Math.floor(containerWidth / slideWidth);
+            const maxIndex = Math.max(0, totalSlides - maxVisibleSlides + 1); // Increase maxTranslate by 1 slide (slideWidth)
 
-            // Calculate the maximum value for currentIndex to avoid overflowing
-            const maxIndex = Math.max(0, totalSlides - maxVisibleSlides + 2); // Increase maxTranslate by 1 slide (slideWidth) and 10 pixels
-
-            // Limit currentIndex within bounds
             currentIndex = Math.max(0, Math.min(maxIndex, currentIndex));
-
             const translateXValue = -currentIndex * slideWidth;
             container.style.transform = `translateX(${translateXValue}px)`;
         }
@@ -310,14 +364,13 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
         prevButton.addEventListener('click', handlePrevSlide);
         nextButton.addEventListener('click', handleNextSlide);
 
-        // Add hover event listeners for slider elements and icons
         slides.forEach((slide) => {
             slide.addEventListener('mouseover', () => {
-                outerContainer.style.cursor = 'grab';
+                slide.style.cursor = 'pointer';
             });
 
             slide.addEventListener('mouseout', () => {
-                outerContainer.style.cursor = 'default';
+                slide.style.cursor = 'default';
             });
         });
 
@@ -329,6 +382,19 @@ class Auxesia_Product_Category extends \Elementor\Widget_Base {
             outerContainer.style.cursor = 'pointer';
         });
     });
+
+    function handleSlideClick(clickedSlide) {
+        const slides = document.querySelectorAll('.swiper-slide');
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active');
+            if (slide === clickedSlide) {
+                currentIndex = index;
+            }
+        });
+
+        clickedSlide.classList.add('active');
+        updateSliderPosition();
+    }	
 </script>
     <?php
 }
