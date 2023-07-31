@@ -88,6 +88,123 @@ class Auxesia_Products_Widget extends \Elementor\Widget_Base {
             </div>
         </section>
 
+        <style>
+        .auxesia-slider-outer {
+            max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+			z-index: 2;
+        }
+
+        .auxesia-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+            transition: transform 0.3s ease;
+        }
+
+        .swiper-slide {
+            display: inline-block;
+            width: max-content;
+            color: <?php echo $settings['text_color']; ?>;
+            <?php if ($settings['categories_typography']['font_size']) : ?>
+                font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
+            <?php endif; ?>
+        }
+
+        .controls-wrapper {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 5vw);
+            z-index: 1;
+            /* Allow controls to overflow */
+            overflow: visible;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .controls i {
+            color: <?php echo $settings['icon_color']; ?>;
+            font-size: <?php echo $arrow_size . $arrow_unit; ?>;
+        }
+
+        /* Position the left arrow on the left side */
+        .controls i:first-child {
+            margin-right: 30px; /* Add spacing between controls */
+        }
+
+        /* Position the right arrow on the right side */
+        .controls i:last-child {
+            margin-left: 30px; /* Add spacing between controls */
+        }
+
+        /* Set active category style */
+        .auxesia-slider-container .swiper-slide.active {
+            font-weight: bold;
+            /* Add additional styles for active category here */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+			
+			.elementor-137 .elementor-element.elementor-element-a258427 .auxesia-slider-outer {
+    			max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>; !important
+			}
+			
+            .auxesia-slider-container {
+                gap: 10px; /* Reduce the gap between slides */
+            }
+            
+            .controls-wrapper {
+                width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 10vw);
+				transform: translateX(-50%) translateY(25%);
+            }
+
+            .controls i {
+                font-size: <?php echo $arrow_size / 1.5 . $arrow_unit; ?>; /* Reduce arrow size for smaller devices */
+            }
+        }
+
+        @media (max-width: 576px) {
+			
+			.elementor-137 .elementor-element.elementor-element-a258427 .auxesia-slider-outer {
+    			max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>; !important
+			}
+			
+            .auxesia-slider-container {
+                flex-wrap: nowrap; /* Blocks the slides to wrap to a new line on smaller devices */
+            }
+
+            .swiper-slide {
+                white-space: normal; /* Allow the category names to wrap */
+                text-align: center; /* Center the text on smaller devices */
+            }
+
+            .controls-wrapper {
+                position: absolute; /* Absolute position for smaller devices */
+                transform: none;
+                width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 15vw);
+				transform: translateX(-25%);
+                margin-top: 10px; /* Add margin between the slides and controls */
+            }
+
+            .controls {
+                justify-content: space-between; /* Center the controls on smaller devices */
+				transform: translateX(-25%) translateY(-25%);
+            }
+
+            .controls i {
+                margin: 0 5px; /* Reduce the spacing between arrows on smaller devices */
+            }
+        }
+    </style>
+
         <?php
     }
 }
