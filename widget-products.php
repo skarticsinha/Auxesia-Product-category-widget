@@ -4,526 +4,371 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Auxesia_Product_Category extends \Elementor\Widget_Base {
+class Auxesia_Products_Widget extends \Elementor\Widget_Base {
 
     // Widget name, title, icon, and category
     public function get_name() {
-        return 'auxesia_product_category';
+        return 'auxesia_products_widget';
     }
 
     public function get_title() {
-        return __('Auxesia Product Category', 'auxesia-product-category');
+        return __('Auxesia Products', 'auxesia-products-widget');
     }
 
     public function get_icon() {
-        return 'eicon-product-related';
+        return 'eicon-products';
     }
 
     public function get_categories() {
         return ['general'];
     }
 
-    protected function _register_controls() {
+	protected function _register_controls() {
+    // Start control section for general settings
     $this->start_controls_section(
-        'section_content',
+        'general_settings_section',
         [
-            'label' => __('Slider Settings', 'auxesia-product-category'),
+            'label' => __('General Settings', 'auxesia-products-widget'),
         ]
     );
 
-    $this->add_responsive_control(
-        'slider_width',
-        [
-            'label' => __('Slider Width', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::SLIDER,
-            'default' => [
-                'size' => 60,
-                'unit' => 'vw',
-            ],
-            'range' => [
-                'vw' => [
-                    'min' => 20,
-                    'max' => 100,
-                ],
-            ],
-            'selectors' => [
-                '{{WRAPPER}} .auxesia-slider-outer' => 'max-width: {{SIZE}}{{UNIT}};',
-            ],
-        ]
-    );
-
-    $this->add_responsive_control(
-        'arrow_size',
-        [
-            'label' => __('Arrow Size', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::SLIDER,
-            'size_units' => ['px', 'em', 'rem'],
-            'range' => [
-                'px' => [
-                    'min' => 10,
-                    'max' => 100,
-                ],
-                'em' => [
-                    'min' => 0.1,
-                    'max' => 10,
-                    'step' => 0.1,
-                ],
-                'rem' => [
-                    'min' => 0.1,
-                    'max' => 10,
-                    'step' => 0.1,
-                ],
-            ],
-            'selectors' => [
-                '{{WRAPPER}} .controls i' => 'font-size: {{SIZE}}{{UNIT}};',
-            ],
-            'separator' => 'before', // To separate the responsive control from the main control
-        ]
-    );
-
-    $this->add_responsive_control(
-        'show_arrows',
-        [
-            'label' => __('Show Arrows', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::SWITCHER,
-            'label_on' => __('Yes', 'auxesia-product-category'),
-            'label_off' => __('No', 'auxesia-product-category'),
-            'default' => 'yes',
-            'selectors' => [
-                '{{WRAPPER}} .controls' => 'display: {{VALUE}};',
-            ],
-        ]
-    );
-
-    $this->add_responsive_control(
-        'icon_color',
-        [
-            'label' => __('Icon Color', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::COLOR,
-            'selectors' => [
-                '{{WRAPPER}} .controls i' => 'color: {{VALUE}};',
-            ],
-            'condition' => [
-                'show_arrows' => 'yes',
-            ],
-        ]
-    );
-		
-		$this->add_control(
-        'prev_icon',
-        [
-            'label' => __('Previous Icon', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::ICONS,
-            'default' => [
-                'value' => 'fas fa-chevron-left',
-                'library' => 'solid',
-            ],
-            'condition' => [
-                'show_arrows' => 'yes',
-            ],
-        ]
-    );
-
+    // Control for product name color
     $this->add_control(
-        'next_icon',
+        'product_name_color',
         [
-            'label' => __('Next Icon', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::ICONS,
-            'default' => [
-                'value' => 'fas fa-chevron-right',
-                'library' => 'solid',
-            ],
-            'condition' => [
-                'show_arrows' => 'yes',
-            ],
-        ]
-    );
-
-    $this->add_responsive_control(
-        'text_color',
-        [
-            'label' => __('Text Color', 'auxesia-product-category'),
+            'label' => __('Product Name Color', 'auxesia-products-widget'),
             'type' => \Elementor\Controls_Manager::COLOR,
+            'default' => '#000000',
             'selectors' => [
-                '{{WRAPPER}} .auxesia-slider-container .swiper-slide' => 'color: {{VALUE}};',
+                '{{WRAPPER}} .product h3' => 'color: {{VALUE}};',
             ],
         ]
     );
 
+    // Control for product name typography
     $this->add_group_control(
         \Elementor\Group_Control_Typography::get_type(),
         [
-            'name' => 'categories_typography',
-            'label' => __('Categories Typography', 'auxesia-product-category'),
-            'selector' => '{{WRAPPER}} .auxesia-slider-container .swiper-slide',
+            'name' => 'product_name_typography',
+            'label' => __('Product Name Typography', 'auxesia-products-widget'),
+            'selector' => '{{WRAPPER}} .product h3',
         ]
     );
 
-    $this->end_controls_section();
-
-    $this->start_controls_section(
-        'section_active_category',
+    // Control for product description color
+    $this->add_control(
+        'product_description_color',
         [
-            'label' => __('Active Category', 'auxesia-product-category'),
+            'label' => __('Product Description Color', 'auxesia-products-widget'),
+            'type' => \Elementor\Controls_Manager::COLOR,
+            'default' => '#333333',
+            'selectors' => [
+                '{{WRAPPER}} .product .discription' => 'color: {{VALUE}};',
+            ],
         ]
     );
 
+    // Control for product description typography
     $this->add_group_control(
         \Elementor\Group_Control_Typography::get_type(),
         [
-            'name' => 'active_category_typography',
-            'label' => __('Active Category Typography', 'auxesia-product-category'),
-            'selector' => '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active',
+            'name' => 'product_description_typography',
+            'label' => __('Product Description Typography', 'auxesia-products-widget'),
+            'selector' => '{{WRAPPER}} .product .discription',
         ]
     );
 
-    $this->add_control(
-        'active_category_color',
-        [
-            'label' => __('Active Category Color', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::COLOR,
-            'selectors' => [
-                '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active' => 'color: {{VALUE}};',
-            ],
-        ]
-    );
-
-    $this->add_control(
-        'active_category_background_color',
-        [
-            'label' => __('Active Category Background Color', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::COLOR,
-            'selectors' => [
-                '{{WRAPPER}} .auxesia-slider-container .swiper-slide.active' => 'background-color: {{VALUE}};',
-            ],
-        ]
-    );
-
+    // End control section for general settings
     $this->end_controls_section();
 
-    // Add a new responsive section for Arrow Size
+    // Start control section for category tag styles
     $this->start_controls_section(
-        'section_responsive_arrow_size',
+        'category_tag_style_section',
         [
-            'label' => __('Responsive Arrow Size', 'auxesia-product-category'),
+            'label' => __('Category Tag Style', 'auxesia-products-widget'),
             'tab' => \Elementor\Controls_Manager::TAB_STYLE,
         ]
     );
 
-    $this->add_responsive_control(
-        'arrow_size_responsive',
-        [
-            'label' => __('Arrow Size', 'auxesia-product-category'),
-            'type' => \Elementor\Controls_Manager::SLIDER,
-            'size_units' => ['px', 'em', 'rem'],
-            'range' => [
-                'px' => [
-                    'min' => 10,
-                    'max' => 100,
+    // Get all product categories
+    $categories = get_terms(['taxonomy' => 'product_cat']);
+    foreach ($categories as $category) {
+        $category_slug = $category->slug;
+        $category_name = ucfirst($category_slug);
+        // Control for category tag color
+        $this->add_control(
+            $category_slug . '_color',
+            [
+                'label' => __('Color for ', 'auxesia-products-widget') . $category_name,
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '.tag.' . $category_slug . ' p' => 'background-color: {{VALUE}};',
                 ],
-                'em' => [
-                    'min' => 0.1,
-                    'max' => 10,
-                    'step' => 0.1,
-                ],
-                'rem' => [
-                    'min' => 0.1,
-                    'max' => 10,
-                    'step' => 0.1,
-                ],
-            ],
-            'selectors' => [
-                '{{WRAPPER}} .controls i' => 'font-size: {{SIZE}}{{UNIT}};',
-            ],
-        ]
-    );
+            ]
+        );
+    }
 
+    // End control section for category tag styles
     $this->end_controls_section();
 }
 
+    // Get all products or products by category
+    protected function get_products_by_category($category_slug) {
+        $args = array(
+            'post_type' => 'product',
+            'posts_per_page' => -1,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'product_cat',
+                    'field' => 'slug',
+                    'terms' => $category_slug,
+                ),
+            ),
+        );
 
-    // Get all product categories from WooCommerce excluding "Uncategorized"
-    protected function get_product_categories() {
-        $categories = get_terms('product_cat', array('hide_empty' => false));
-
-        // Remove "Uncategorized" category from the list
-        foreach ($categories as $key => $category) {
-            if ($category->slug === 'uncategorized') {
-                unset($categories[$key]);
-                break;
-            }
+        if ($category_slug === 'all') {
+            unset($args['tax_query']);
         }
 
-        // Add "All" category to the beginning of the list
-        $all_category = (object) array(
-            'term_id' => 0,
-            'name' => 'All',
-            'slug' => 'all',
-        );
-        array_unshift($categories, $all_category);
+        $products_query = new WP_Query($args);
 
-        return $categories;
-    }
-
-    // Helper function to get the plugin directory URL
-    protected function get_plugin_dir_url() {
-        return plugin_dir_url(__FILE__);
+        return $products_query->posts;
     }
 
     // Widget frontend render
-protected function render() {
+    protected function render() {
     $settings = $this->get_settings_for_display();
-    $categories = $this->get_product_categories();
     $active_category = isset($_GET['product_cat']) ? $_GET['product_cat'] : 'all'; // Get the active category from URL parameter
 
-    // Add plugin directory URL
-    $plugin_dir_url = $this->get_plugin_dir_url();
+    // Fetch products based on the active category
+    $products = $this->get_products_by_category($active_category);
 
-    // Add Font Awesome 6 stylesheet link
-    echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">';
+    // Output the product list
+    echo '<section class="products">';
+    echo '<p class="count">' . count($products) . ' Products Listed</p>';
+    echo '<div class="product-container">';
 
-    // Output the Font Awesome 6 webfont stylesheet
-    echo '<style>
-            @font-face {
-                font-family: "Font Awesome 6 Free";
-                font-style: normal;
-                font-weight: 400;
-                src: url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff2) format("woff2"),
-                     url(' . $plugin_dir_url . 'webfonts/fa-regular-400.woff) format("woff");
+    if ($products) {
+        foreach ($products as $index => $product) {
+            $product_name = $product->post_title;
+            $product_image_url = get_the_post_thumbnail_url($product->ID, 'full');
+            $product_description = get_post_meta($product->ID, '_yoast_wpseo_metadesc', true);
+            $product_url = get_permalink($product->ID); // Get the product page URL
+
+            // Get the product category
+            $product_categories = get_the_terms($product->ID, 'product_cat');
+            $product_category_slug = 'all';
+            if ($product_categories && !is_wp_error($product_categories)) {
+                $product_category_slug = $product_categories[0]->slug;
             }
-            
-            .controls i {
-                font-family: "Font Awesome 6 Free";
+
+            // Generate product HTML markup
+            echo '<div class="product" data-name="p-' . ($index + 1) . '">';
+            echo '<div class="tag ' . $product_category_slug . '">';
+            echo '<p style="background-color: ' . $settings[$product_category_slug . '_color'] . ';">' . ucfirst($product_category_slug) . '</p>';
+            echo '</div>';
+            echo '<img src="' . $product_image_url . '" alt="' . $product_name . '">';
+
+            // Apply product name style
+            $product_name_style = '';
+            if (!empty($settings['product_name_color'])) {
+                $product_name_style .= 'color: ' . $settings['product_name_color'] . ';';
             }
-        </style>';
+            if (!empty($settings['product_name_typography'])) {
+                $product_name_style .= 'font-family: ' . $settings['product_name_typography']['family'] . ';';
+                $product_name_style .= 'font-weight: ' . $settings['product_name_typography']['weight'] . ';';
+                $product_name_style .= 'font-size: ' . $settings['product_name_typography']['size'] . 'px;';
+                $product_name_style .= 'line-height: ' . $settings['product_name_typography']['line_height'] . ';';
+            }
+            echo '<h3 style="' . $product_name_style . '">' . $product_name . '</h3>';
 
-    // Add inline styles for arrow size
-    $arrow_size = isset($settings['arrow_size']['size']) ? $settings['arrow_size']['size'] : 20;
-    $arrow_unit = isset($settings['arrow_size']['unit']) ? $settings['arrow_size']['unit'] : 'px';
+            // Apply product description style
+            $product_description_style = '';
+            if (!empty($settings['product_description_color'])) {
+                $product_description_style .= 'color: ' . $settings['product_description_color'] . ';';
+            }
+            if (!empty($settings['product_description_typography'])) {
+                $product_description_style .= 'font-family: ' . $settings['product_description_typography']['family'] . ';';
+                $product_description_style .= 'font-weight: ' . $settings['product_description_typography']['weight'] . ';';
+                $product_description_style .= 'font-size: ' . $settings['product_description_typography']['size'] . 'px;';
+                $product_description_style .= 'line-height: ' . $settings['product_description_typography']['line_height'] . ';';
+            }
+            echo '<p class="discription" style="' . $product_description_style . '">' . $product_description . '</p>';
 
-    // Get active category index
-    $active_category_index = 0;
-    foreach ($categories as $index => $category) {
-        if ($category->slug === $active_category) {
-            $active_category_index = $index;
-            break;
+            // Add "Request Details" button for each product with the product URL
+            echo '<a href="' . $product_url . '"><button class="req-btn"> Request Details</button></a>';
+
+            echo '</div>';
         }
+    } else {
+        echo '<p>No products found.</p>';
     }
 
-    $this->add_inline_editing_attributes('text_color', 'basic');
+    echo '</div>';
+    echo '</section>';
+		
     ?>
+
     <style>
-        .auxesia-slider-outer {
-            max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>;
-            margin: 0 auto;
-            overflow: hidden;
-            position: relative;
-			z-index: 2;
-        }
+        .products{
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 2rem 0 4rem;
+    position: relative;
+    z-index: 0;
+}
 
-        .auxesia-slider-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            white-space: nowrap;
-            transition: transform 0.3s ease;
-        }
+.count{
+    font-size: 1rem;
+    color: #5E5E5E;
+    margin-bottom: 1rem;
+}
 
-        .swiper-slide {
-            display: inline-block;
-            width: max-content;
-            color: <?php echo $settings['text_color']; ?>;
-            <?php if ($settings['categories_typography']['font_size']) : ?>
-                font-size: <?php echo $settings['categories_typography']['font_size']; ?>;
-            <?php endif; ?>
-        }
+.product-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 2rem;
 
-        .controls-wrapper {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 5vw);
-            z-index: 1;
-            /* Allow controls to overflow */
-            overflow: visible;
-        }
+}
 
-        .controls {
-            display: flex;
-            justify-content: space-between;
-        }
+.product{
+    background-color: white;
+    width: fit-content;
+    padding: 1.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
 
-        .controls i {
-            color: <?php echo $settings['icon_color']; ?>;
-            font-size: <?php echo $arrow_size . $arrow_unit; ?>;
-        }
+/* === tag === */
 
-        /* Position the left arrow on the left side */
-        .controls i:first-child {
-            margin-right: 30px; /* Add spacing between controls */
-        }
+.product .tag{
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin-left: -1.5rem;
+}
 
-        /* Position the right arrow on the right side */
-        .controls i:last-child {
-            margin-left: 30px; /* Add spacing between controls */
-        }
+.product .tag p{
+    padding: 0.75rem 1.5rem;
+}
 
-        /* Set active category style */
-        .auxesia-slider-container .swiper-slide.active {
-            font-weight: bold;
-            /* Add additional styles for active category here */
-        }
+/* === tag === */
 
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-			
-			.elementor-137 .elementor-element.elementor-element-a258427 .auxesia-slider-outer {
-    			max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>; !important
-			}
-			
-            .auxesia-slider-container {
-                gap: 10px; /* Reduce the gap between slides */
-            }
-            
-            .controls-wrapper {
-                width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 10vw);
-				transform: translateX(-50%) translateY(25%);
-            }
+.product img{
+    position: relative;
+    z-index: 0;
+    transition: all 0.5s;
+}
 
-            .controls i {
-                font-size: <?php echo $arrow_size / 1.5 . $arrow_unit; ?>; /* Reduce arrow size for smaller devices */
-            }
-        }
+.product:hover img{
+    transform: scale(1.1);
 
-        @media (max-width: 576px) {
-			
-			.elementor-137 .elementor-element.elementor-element-a258427 .auxesia-slider-outer {
-    			max-width: <?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?>; !important
-			}
-			
-            .auxesia-slider-container {
-                flex-wrap: nowrap; /* Blocks the slides to wrap to a new line on smaller devices */
-            }
+}
 
-            .swiper-slide {
-                white-space: normal; /* Allow the category names to wrap */
-                text-align: center; /* Center the text on smaller devices */
-            }
 
-            .controls-wrapper {
-                position: absolute; /* Absolute position for smaller devices */
-                transform: none;
-                width: calc(<?php echo $settings['slider_width']['size'] . $settings['slider_width']['unit']; ?> + 15vw);
-				transform: translateX(-25%);
-                margin-top: 10px; /* Add margin between the slides and controls */
-            }
 
-            .controls {
-                justify-content: space-between; /* Center the controls on smaller devices */
-				transform: translateX(-25%) translateY(-25%);
-            }
+.product h3{
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
 
-            .controls i {
-                margin: 0 5px; /* Reduce the spacing between arrows on smaller devices */
-            }
-        }
+.product p{
+    position: relative;
+    z-index: 1;
+    padding: 0.5rem 0 1rem;
+}
+
+.product button {
+    position: relative;
+    z-index: 1;
+    background-color: #C15690;
+    color: white;
+    font-size: 100%;
+    font-weight: 500;
+    border-style: none;
+    border-radius: 4px;
+    padding: 1.5vh 2.5vw;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.product button:hover{
+    transform: scale(0.95);
+}
+
+
+/* ===== Products Section ===== */
+
+
+
+/* ===== Products Section Responsive ===== */
+
+/* 512px */
+@media(max-width: 32em) {
+
+
+    .products{
+        max-width: 1200px;
+        margin: 1rem auto;
+        padding: 2rem 0 0 1rem;
+    }
+
+    .product-container{
+        grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        margin: -2rem;
+    }
+
+    .product{
+        margin-top: -5rem;
+        transform: scale(0.8);
+    }
+    
+    .product:first-child{
+        margin-top: 0;
+    }
+
+
+}
     </style>
-    <div class="controls-wrapper">
-        <div class="controls">
-            <i class="<?php echo esc_attr($settings['prev_icon']['value']); ?>" onclick="handlePrevSlide()"></i>
-            <i class="<?php echo esc_attr($settings['next_icon']['value']); ?>" onclick="handleNextSlide()"></i>
-        </div>
-    </div>
-    <div class="auxesia-slider-outer">
-        <div class="auxesia-slider-container">
-            <?php foreach ($categories as $index => $category) : ?>
-                <?php
-                // Set the active class based on the current category being displayed
-                $active_class = ($category->slug === $active_category) ? 'active' : '';
-                ?>
-                <div class="swiper-slide <?php echo $active_class; ?>" data-slug="<?php echo esc_attr($category->slug); ?>">
-                    <?php echo $category->name; ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
 
     <script>
-        // Function to handle the click event of the category slide
-        function handleCategorySlide(event) {
-            const slug = event.target.dataset.slug;
-            // Redirect to the category URL with the selected category slug as a parameter
-            window.location.href = '<?php echo home_url(); ?>/?product_cat=' + slug;
+    // JavaScript to handle displaying products by category
+    function updateProductsByCategory(category) {
+        const productsContainer = document.querySelector('.product-container');
+        const allProducts = productsContainer.querySelectorAll('.product');
+
+        function hideAllProducts() {
+            allProducts.forEach(product => product.style.display = 'none');
         }
 
-        // Add click event listeners to each category slide
-        const categorySlides = document.querySelectorAll('.auxesia-slider-container .swiper-slide');
-        categorySlides.forEach(slide => {
-            slide.addEventListener('click', handleCategorySlide);
-        });
-
-        // Function to fetch and display products based on the selected category
-        function fetchProducts(categorySlug) {
-            // Prepare the API URL to fetch products from the selected category
-            let apiUrl = '<?php echo home_url(); ?>/wp-json/wc/v3/products';
-            if (categorySlug && categorySlug !== 'all') {
-                apiUrl += '?category=' + categorySlug;
-            }
-
-            // Fetch products using the WooCommerce API
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(products => {
-                    // Render the products
-                    const productsContainer = document.getElementById('auxesia-products-container');
-                    productsContainer.innerHTML = ''; // Clear previous content
-                    products.forEach(product => {
-                        // Create a product card element
-                        const productCard = document.createElement('div');
-                        productCard.className = 'product-card';
-
-                        // Create product image element
-                        const productImage = document.createElement('img');
-                        productImage.src = product.images[0].src;
-                        productCard.appendChild(productImage);
-
-                        // Create product title element
-                        const productTitle = document.createElement('h3');
-                        productTitle.innerText = product.name;
-                        productCard.appendChild(productTitle);
-
-                        // Create product price element
-                        const productPrice = document.createElement('span');
-                        productPrice.innerText = '<?php echo get_woocommerce_currency_symbol(); ?>' + product.price;
-                        productCard.appendChild(productPrice);
-
-                        // Append the product card to the container
-                        productsContainer.appendChild(productCard);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching products:', error);
-                });
+        function showProductsByCategory(category) {
+            allProducts.forEach(product => {
+                const productCategory = product.querySelector('.tag p').textContent.toLowerCase();
+                if (category === 'all' || productCategory === category) {
+                    product.style.display = 'block';
+                }
+            });
         }
 
-        // Function to handle the click event of the previous arrow
-        function handlePrevSlide() {
-            const activeSlide = document.querySelector('.auxesia-slider-container .swiper-slide.active');
-            const prevSlide = activeSlide.previousElementSibling || categorySlides[categorySlides.length - 1];
-            prevSlide.click(); // Simulate click on the previous slide to change the category
-        }
+        hideAllProducts();
+        showProductsByCategory(category);
+    }
 
-        // Function to handle the click event of the next arrow
-        function handleNextSlide() {
-            const activeSlide = document.querySelector('.auxesia-slider-container .swiper-slide.active');
-            const nextSlide = activeSlide.nextElementSibling || categorySlides[0];
-            nextSlide.click(); // Simulate click on the next slide to change the category
+    // JavaScript to handle click event on the slider container
+    const sliderContainer = document.querySelector('.auxesia-slider-container');
+    sliderContainer.addEventListener('click', (event) => {
+        const clickedElement = event.target;
+        if (clickedElement.classList.contains('swiper-slide')) {
+            const activeCategory = clickedElement.dataset.category;
+            updateProductsByCategory(activeCategory);
         }
-
-        // Fetch products based on the initially selected category
-        fetchProducts('<?php echo esc_js($active_category); ?>');
-    </script>
+    });
+</script>
 
     <?php
-}
+    }
 }

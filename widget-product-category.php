@@ -437,7 +437,9 @@ protected function render() {
     <div class="auxesia-slider-outer">
         <div class="auxesia-slider-container">
             <?php foreach ($categories as $index => $category) : ?>
-                <div class="swiper-slide <?php echo $active_category_index === $index ? 'active' : ''; ?>" onclick="handleSlideClick(this)">
+                <div class="swiper-slide <?php echo $active_category_index === $index ? 'active' : ''; ?>"
+                     onclick="handleSlideClick(this)"
+                     data-category="<?php echo esc_attr($category->slug); ?>">
                     <?php echo $category->name; ?>
                 </div>
             <?php endforeach; ?>
@@ -466,6 +468,12 @@ protected function render() {
             const translateXValue = -currentIndex * slideWidth;
             container.style.transform = `translateX(${translateXValue}px)`;
         }
+		
+		function handleSlideClick(clickedSlide) {
+    const categorySlug = clickedSlide.dataset.category;
+    // Now you can use the categorySlug in your code as needed.
+    // ...
+}
 
         function handleNextSlide() {
             currentIndex++;
