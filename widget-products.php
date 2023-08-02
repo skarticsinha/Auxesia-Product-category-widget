@@ -136,7 +136,7 @@ class Auxesia_Products_Widget extends \Elementor\Widget_Base {
     }
 
     // Widget frontend render
-    protected function render() {
+protected function render() {
     $settings = $this->get_settings_for_display();
     $active_category = isset($_GET['product_cat']) ? $_GET['product_cat'] : 'all'; // Get the active category from URL parameter
 
@@ -145,7 +145,61 @@ class Auxesia_Products_Widget extends \Elementor\Widget_Base {
 
     // Output the product list
     echo '<section class="products">';
-    echo '<p class="count">' . count($products) . ' Products Listed</p>';
+
+    // JavaScript to handle displaying products by category and update count
+    echo '<script>';
+    echo 'function updateProductsByCategory(category) {';
+    echo '    const productsContainer = document.querySelector(".product-container");';
+    echo '    const allProducts = productsContainer.querySelectorAll(".product[data-name]");';
+    echo '    let visibleProductsCount = 0;';
+    echo '    function hideAllProducts() {';
+    echo '        allProducts.forEach(product => product.style.display = "none");';
+    echo '    }';
+
+    echo '    function showProductsByCategory(category) {';
+    echo '        allProducts.forEach(product => {';
+    echo '            const productCategory = product.dataset.name;';
+    echo '            if (category === "all" || productCategory === "p-" + category) {';
+    echo '                product.style.display = "block";';
+    echo '                visibleProductsCount++;';
+    echo '            }';
+    echo '        });';
+    echo '    }';
+
+    echo '    hideAllProducts();';
+    echo '    showProductsByCategory(category);';
+
+    echo '    // Update the count elements';
+    echo '    const countElements = document.querySelectorAll(".count");';
+    echo '    countElements.forEach(countElement => countElement.style.display = "none");';
+    echo '    const categoryDivs = document.querySelectorAll(".category-container");';
+    echo '    categoryDivs.forEach(categoryDiv => categoryDiv.style.display = "none");';
+    echo '    const activeCategoryDiv = document.querySelector(`.category-container[data-category="${category}"]`);';
+    echo '    if (activeCategoryDiv) {';
+    echo '        activeCategoryDiv.style.display = "block";';
+    echo '    }';
+    echo '}';
+    echo '</script>';
+
+    // Output the category containers
+    echo '<div class="category-container" style="display: ' . ($active_category === 'all' ? 'block' : 'none') . ';" data-category="all">';
+    echo '<p class="category-name">All</p>';
+    $all_products_count = count($this->get_products_by_category('all'));
+    echo '<p class="count" data-category="all">' . $all_products_count . ' Products Listed</p>';
+    echo '</div>';
+
+    $categories = get_terms(['taxonomy' => 'product_cat']);
+    foreach ($categories as $category) {
+        $category_slug = $category->slug;
+        $category_name = ucfirst($category_slug);
+        $category_count = count($this->get_products_by_category($category_slug));
+        echo '<div class="category-container" style="display: ' . ($active_category === $category_slug ? 'block' : 'none') . ';" data-category="' . $category_slug . '">';
+        echo '<p class="category-name">' . $category_name . '</p>';
+        echo '<p class="count" data-category="' . $category_slug . '">' . $category_count . ' Products Listed</p>';
+        echo '</div>';
+    }
+
+    // Output the product container
     echo '<div class="product-container">';
 
     if ($products) {
@@ -206,6 +260,20 @@ class Auxesia_Products_Widget extends \Elementor\Widget_Base {
 
     echo '</div>';
     echo '</section>';
+	
+	// JavaScript to handle click event on the slider container
+    echo '<script>';
+    echo 'document.addEventListener("DOMContentLoaded", () => {';
+    echo '    const sliderContainer = document.querySelector(".auxesia-slider-container");';
+    echo '    sliderContainer.addEventListener("click", (event) => {';
+    echo '        const clickedElement = event.target;';
+    echo '        if (clickedElement.classList.contains("swiper-slide")) {';
+    echo '            const activeCategory = clickedElement.dataset.category;';
+    echo '            updateProductsByCategory(activeCategory);';
+    echo '        }';
+    echo '    });';
+    echo '});';
+    echo '</script>';
 		
     ?>
 
@@ -234,6 +302,7 @@ class Auxesia_Products_Widget extends \Elementor\Widget_Base {
 .product{
     background-color: white;
     width: fit-content;
+	min-width: 22.425rem;
     padding: 1.5rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
 }
