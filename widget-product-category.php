@@ -324,7 +324,7 @@ protected function render() {
         .auxesia-slider-container {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 5rem;
             white-space: nowrap;
             transition: transform 0.3s ease;
         }
